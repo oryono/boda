@@ -8,12 +8,24 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+### Endpoints
 
-## Learn more
+```sh
+GET /api/promos
+```
+This lists all the promo codes
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+```sh
+GET /api/promos/{code}?origin=exampleOrigin&destination=exampleDestination
+```
+This shows if a code is valid. Accepts origin and destination parameters
+
+```sh
+GET /api/promos/status/active
+```
+This returns active promos
+
+```sh
+POST /api/promos
+```
+This allows you to create new promo code
