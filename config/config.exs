@@ -11,8 +11,8 @@ config :boda,
   ecto_repos: [Boda.Repo]
 
 config :google_maps,
-       api_key: "AIzaSyAxws8xAfvLv9SCctbxZ_c6JIbGh9WElJs"
-
+       api_key: "AIzaSyAxws8xAfvLv9SCctbxZ_c6JIbGh9WElJs" # In production this should be a secret and loaded from system env variables.
+                                                          # Please replace this with your api key for now.
 
 # Configures the endpoint
 config :boda, BodaWeb.Endpoint,
