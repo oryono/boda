@@ -45,6 +45,17 @@ defmodule BodaWeb.PromoController do
   end
 
   def details(conn, %{"code" => code, "destination" => destination, "origin" => origin}) do
+    if (String.length(origin) == 0 || String.length(destination) == 0) do
+      conn
+      |> put_status(400)
+      |> json(
+           %{
+             errors: %{
+               detail: "Both origin and destination are required"
+             }
+           }
+         )
+    end
     {
       :ok,
       %{
