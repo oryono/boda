@@ -16,7 +16,7 @@ GET /api/promos
 This lists all the promo codes
 
 ```sh
-GET /api/promos/{code}?origin=exampleOrigin&destination=exampleDestination
+GET /api/promos/details/{code}?origin=exampleOrigin&destination=exampleDestination
 ```
 This shows if a code is valid. Accepts origin and destination parameters
 
