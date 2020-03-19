@@ -8,7 +8,7 @@ defmodule BodaWeb.PromoControllerTest do
     amount: "120.50",
     expiry_date: ~D[2010-04-17],
     is_active: true,
-    is_expired: true,
+    is_expired: false,
     radius: 42
   }
   @update_attrs %{
@@ -49,16 +49,73 @@ defmodule BodaWeb.PromoControllerTest do
                "code" => _,
                "expiry_date" => "2010-04-17",
                "is_active" => true,
-               "is_expired" => true,
+               "is_expired" => false,
                "radius" => 42
              } = json_response(conn, 200)["data"]
+    end
+
+    test "returns promo code details when within the right radius", %{conn: conn} do
+      post(conn, Routes.promo_path(conn, :create), promo: @create_attrs)
+      conn = get(conn, Routes.promo_path(conn, :index))
+      promo = List.first(json_response(conn, 200)["data"])
+      conn = get(
+        conn,
+        Routes.promo_path(conn, :details, Map.get(promo, "code"), %{origin: "Kampala", destination: "Luzira"})
+      ) # Should figure out away to mock this
+      details = conn
+                |> json_response(200)
+      assert %{
+               # Assert response has a polyline and a promo
+               "polyline" => polyline,
+               "promo" => promo
+             } = details
+    end
+
+    test "returns promo code details when not within radius", %{conn: conn} do
+      post(conn, Routes.promo_path(conn, :create), promo: @create_attrs)
+      conn = get(conn, Routes.promo_path(conn, :index))
+      promo = List.first(json_response(conn, 200)["data"])
+      conn = get(
+        conn,
+        Routes.promo_path(conn, :details, Map.get(promo, "code"), %{origin: "Kampala", destination: "Nakasongola"})
+      ) # Should figure out away to mock this
+
+      details = conn
+                |> json_response(400)
+
+      assert %{
+               "errors" => %{ # Make sure an error is there
+                 "detail" => "This code can only be used within a radius of 42 km"
+               }
+             } = details
+    end
+
+    test "returns promo code details when code is expired or not active", %{conn: conn} do
+      post(conn, Routes.promo_path(conn, :create), promo: @update_attrs)
+      conn = get(conn, Routes.promo_path(conn, :index))
+      promo = List.first(json_response(conn, 200)["data"])
+      conn = get(
+        conn,
+        Routes.promo_path(conn, :details, Map.get(promo, "code"), %{origin: "Kampala", destination: "Nakasongola"})
+      ) # Should figure out away to mock this
+
+      details = conn
+                |> json_response(400)
+
+      assert %{
+               "errors" => %{ # Make sure an error is there
+                 "detail" => "This promo code has either expired or not active"
+               }
+             } = details
     end
 
     test "returns only active promos", %{conn: conn} do
       conn = post(conn, Routes.promo_path(conn, :create), promo: @create_attrs)
       conn = get(conn, Routes.promo_path(conn, :active))
 
-      active_promo = List.first(json_response(conn, 200)["data"]) # This returns an active promo since the @create_attrs creates an active promo
+      active_promo = List.first(
+        json_response(conn, 200)["data"]
+      ) # This returns an active promo since the @create_attrs creates an active promo
 
       assert %{
                "id" => id,
@@ -66,14 +123,15 @@ defmodule BodaWeb.PromoControllerTest do
                "code" => _,
                "expiry_date" => "2010-04-17",
                "is_active" => true,
-               "is_expired" => true,
+               "is_expired" => false,
                "radius" => 42
-             } = active_promo
+             } = active_promo # It's there, and it's active
 
       conn = put(conn, Routes.promo_path(conn, :update, Promos.get_promo!(id)), promo: @update_attrs)
       conn = get(conn, Routes.promo_path(conn, :active))
       active_promo = json_response(conn, 200)["data"] # After update this will be empty
-      assert [] = active_promo # We are asserting that if the active promo is updated to be ! active, then if we query we should have an empty list
+      assert [
+             ] = active_promo # We are asserting that if the active promo is updated to be ! active, then if we query we should have an empty list
 
     end
 

@@ -64,46 +64,42 @@ defmodule BodaWeb.PromoController do
 
     promo = Repo.get_by!(Promos.Promo, code: code)
     distance = distance / 1000
+    cond do
+      (promo.is_expired || !promo.is_active) -> conn
+                                                |> put_status(400)
+                                                |> json(
+                                                     %{
+                                                       errors: %{
+                                                         detail: "This promo code has either expired or not active"
+                                                       }
+                                                     }
+                                                   )
 
-    if (promo.is_expired || !promo.is_active) do
-      conn
-      |> put_status(400)
-      |> json(
-           %{
-             errors: %{
-               detail: "This promo code has either expired or not active"
-             }
-           }
-         )
+      distance > promo.radius -> conn
+                                 |> put_status(400)
+                                 |> json(
+                                      %{
+                                        errors: %{
+                                          detail: "This code can only be used within a radius of #{promo.radius} km"
+                                        }
+                                      }
+                                    )
+
+      true -> {
+                :ok,
+                %{
+                  "routes" => [
+                    %{
+                      "overview_polyline" => %{
+                        "points" => polyline
+                      }
+                    }
+                  ]
+                }
+              }
+              = GoogleMaps.directions(origin, destination)
+              render(conn, "details.json", %{promo: promo, polyline: polyline})
     end
-
-    if (distance > promo.radius) do
-      conn
-      |> put_status(400)
-      |> json(
-           %{
-             errors: %{
-               detail: "This code can only be used within a radius of #{promo.radius} km"
-             }
-           }
-         )
-    end
-
-    {
-      :ok,
-      %{
-        "routes" => [
-          %{
-            "overview_polyline" => %{
-              "points" => polyline
-            }
-          }
-        ]
-      }
-    }
-    = GoogleMaps.directions(origin, destination)
-    render(conn, "details.json", %{promo: promo, polyline: polyline})
-
   end
 
   def active(conn, _) do
