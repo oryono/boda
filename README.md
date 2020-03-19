@@ -1,4 +1,5 @@
-# Boda ![Elixir CI](https://github.com/oryono/boda/workflows/Elixir%20CI/badge.svg)
+# Boda ![Elixir CI](https://github.com/oryono/boda/workflows/Elixir%20CI/badge.svg)    [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/4fb6de0e68fb169245f6)
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
