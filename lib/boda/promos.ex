@@ -1,0 +1,200 @@
+defmodule Boda.Promos do
+  @moduledoc """
+  The Promos context.
+  """
+
+  import Ecto.Query, warn: false
+  alias Boda.Repo
+
+  alias Boda.Promos.Promo
+
+  @doc """
+  Returns the list of promos.
+
+  ## Examples
+
+      iex> list_promos()
+      [%Promo{}, ...]
+
+  """
+  def list_promos do
+    Repo.all(Promo)
+  end
+
+  @doc """
+  Gets a single promo.
+
+  Raises `Ecto.NoResultsError` if the Promo does not exist.
+
+  ## Examples
+
+      iex> get_promo!(123)
+      %Promo{}
+
+      iex> get_promo!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_promo!(id), do: Repo.get!(Promo, id)
+
+  @doc """
+  Creates a promo.
+
+  ## Examples
+
+      iex> create_promo(%{field: value})
+      {:ok, %Promo{}}
+
+      iex> create_promo(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_promo(attrs \\ %{}) do
+    %Promo{}
+    |> Promo.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a promo.
+
+  ## Examples
+
+      iex> update_promo(promo, %{field: new_value})
+      {:ok, %Promo{}}
+
+      iex> update_promo(promo, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_promo(%Promo{} = promo, attrs) do
+    promo
+    |> Promo.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a promo.
+
+  ## Examples
+
+      iex> delete_promo(promo)
+      {:ok, %Promo{}}
+
+      iex> delete_promo(promo)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_promo(%Promo{} = promo) do
+    Repo.delete(promo)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking promo changes.
+
+  ## Examples
+
+      iex> change_promo(promo)
+      %Ecto.Changeset{source: %Promo{}}
+
+  """
+  def change_promo(%Promo{} = promo) do
+    Promo.changeset(promo, %{})
+  end
+
+  alias Boda.Promos.Event
+
+  @doc """
+  Returns the list of events.
+
+  ## Examples
+
+      iex> list_events()
+      [%Event{}, ...]
+
+  """
+  def list_events do
+    Repo.all(Event)
+  end
+
+  @doc """
+  Gets a single event.
+
+  Raises `Ecto.NoResultsError` if the Event does not exist.
+
+  ## Examples
+
+      iex> get_event!(123)
+      %Event{}
+
+      iex> get_event!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_event!(id), do: Repo.get!(Event, id)
+
+  @doc """
+  Creates a event.
+
+  ## Examples
+
+      iex> create_event(%{field: value})
+      {:ok, %Event{}}
+
+      iex> create_event(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_event(attrs \\ %{}) do
+    %Event{}
+    |> Event.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a event.
+
+  ## Examples
+
+      iex> update_event(event, %{field: new_value})
+      {:ok, %Event{}}
+
+      iex> update_event(event, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_event(%Event{} = event, attrs) do
+    event
+    |> Event.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a event.
+
+  ## Examples
+
+      iex> delete_event(event)
+      {:ok, %Event{}}
+
+      iex> delete_event(event)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_event(%Event{} = event) do
+    Repo.delete(event)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking event changes.
+
+  ## Examples
+
+      iex> change_event(event)
+      %Ecto.Changeset{source: %Event{}}
+
+  """
+  def change_event(%Event{} = event) do
+    Event.changeset(event, %{})
+  end
+end
