@@ -11,12 +11,8 @@ config :boda,
   ecto_repos: [Boda.Repo]
 
 config :google_maps,
-       api_key:   System.get_env("GOOGLE_MAPS_API_KEY") ||
-         raise """
-         Google maps api key is missing. Please obtain one, and remember to enable distance matrix api and directions api
-         Use the command below to export the key to system variables.
-         export GOOGLE_MAPS_API_KEY=your-key-here
-         """
+       api_key: "AIzaSyAxws8xAfvLv9SCctbxZ_c6JIbGh9WElJs" # In production this should be a secret and loaded from system env variables.
+                                                          # Please replace this with your api key for now.
 
 # Configures the endpoint
 config :boda, BodaWeb.Endpoint,
