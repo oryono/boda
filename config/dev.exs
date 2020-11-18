@@ -1,6 +1,6 @@
 use Mix.Config
 
-# Configure your database
+# Configure your databases
 config :boda, Boda.Repo,
   username: "postgres",
   password: "postgres",
